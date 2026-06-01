@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BLAB Portfolio | NEXT-GEN DIGITAL MANUFACTURING</title>
+  <!-- 프리미엄 고대비 서체 Inter 및 Pretendard 로드 -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+  <style>
+    /* 1. 디자인 시스템 정의 (Vention Tech 감성) */
+    :root {
+      --blab-bg-dark: #07090e;
+      --blab-bg-card: #111622;
+      --blab-accent-blue: #0066ff;
+      --blab-accent-cyan: #00f0ff;
+      --blab-text-primary: #ffffff;
+      --blab-text-secondary: #8f9cae;
+      --blab-grid-line: rgba(255, 255, 255, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--blab-bg-dark);
+      color: var(--blab-text-primary);
+      overflow-x: hidden;
+    }
+
+    /* 엔지니어링 모듈러 그리드 배경 패턴 */
+    .blab-grid-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(to right, var(--blab-grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--blab-grid-line) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* 2. 네비게이션 헤더 */
+    .blab-header {
+      width: 100%;
+      padding: 30px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+
+    .blab-logo {
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      color: var(--blab-text-primary);
+    }
+    .blab-logo span { color: var(--blab-accent-blue); }
+
+    .blab-nav-badge {
+      background: rgba(0, 102, 255, 0.1);
+      border: 1px solid var(--blab-accent-blue);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--blab-accent-cyan);
+    }
+
+    /* 3. 히어로 섹션 (Vention 스타일의 구조적 타이포) */
+    .blab-hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 8%;
+      position: relative;
+    }
+
+    .blab-hero-content {
+      max-width: 900px;
+      z-index: 2;
+    }
+
+    .blab-hero-tag {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--blab-accent-blue);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .blab-hero-title {
+      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.05em;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+    }
+
+    .blab-hero-title span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(50px);
+      animation: revealUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .blab-hero-title .word-1 { animation-delay: 0.1s; }
+    .blab-hero-title .word-2 { animation-delay: 0.3s; color: var(--blab-accent-blue); }
+
+    .blab-hero-desc {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      color: var(--blab-text-secondary);
+      line-height: 1.6;
+      max-width: 600px;
+      margin-bottom: 40px;
+    }
+
+    /* 4. 벤토 그리드 아키텍처 섹션 */
+    .blab-section {
+      padding: 140px 8%;
+      position: relative;
+    }
+
+    .blab-section-header {
+      margin-bottom: 60px;
+    }
+
+    .blab-section-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 15px;
+    }
+
+    /* 고감도 테크 벤토 그리드 */
+    .blab-bento-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+    }
+
+    .blab-card {
+      background: var(--blab-bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .blab-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 2px;
+      background: linear-gradient(90deg, var(--blab-accent-blue), var(--blab-accent-cyan));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .blab-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 102, 255, 0.3);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    .blab-card:hover::before { opacity: 1; }
+
+    .blab-card-num {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--blab-accent-cyan);
+      margin-bottom: 30px;
+    }
+
+    .blab-card-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      letter-spacing: -0.02em;
+    }
+
+    .blab-card-desc {
+      color: var(--blab-text-secondary);
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    /* 대형 스팬 카드 (Vention 스타일 시뮬레이터 데모 공간) */
+    .grid-col-2 { grid-column: span 2; }
+
+    /* 5. JS 실시간 제어 시뮬레이션 콘솔 모듈 (기술력 증명 장치) */
+    .blab-console {
+      background: #0d121f;
+      border: 1px dashed rgba(0, 102, 255, 0.4);
+      border-radius: 12px;
+      padding: 25px;
+      margin-top: 20px;
+    }
+
+    .blab-console-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 10px;
+    }
+
+    .blab-status-dot {
+      width: 8px; height: 8px;
+      background-color: #00ff66;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 10px #00ff66;
+      margin-right: 8px;
+    }
+
+    .blab-metric-flex {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .blab-metric-box {
+      background: rgba(255,255,255,0.02);
+      padding: 15px;
+      border-radius: 8px;
+      width: 50%;
+    }
+
+    .blab-metric-label { font-size: 0.75rem; color: var(--blab-text-secondary); text-transform: uppercase; }
+    .blab-metric-value { font-size: 1.8rem; font-weight: 800; color: var(--blab-accent-cyan); margin-top: 5px; }
+
+    /* 6. 강력한 매출전환 푸터 락업 */
+    .blab-cta-footer {
+      background: linear-gradient(180deg, transparent, #0b111e);
+      padding: 120px 8% 80px 8%;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .blab-btn {
+      display: inline-block;
+      background: var(--blab-accent-blue);
+      color: white;
+      text-decoration: none;
+      padding: 18px 40px;
+      font-weight: 700;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      box-shadow: 0 10px 30px rgba(0, 102, 255, 0.3);
+      transition: all 0.3s ease;
+      margin-top: 30px;
+    }
+
+    .blab-btn:hover {
+      background: #1a75ff;
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0, 102, 255, 0.5);
+    }
+
+    /* 7. 스크롤 반응형 Reveal 애니메이션 */
+    .blab-reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .blab-reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes revealUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 모바일 반응형 완벽 최적화 */
+    @media (max-width: 1024px) {
+      .blab-bento-grid { grid-template-columns: 1fr; }
+      .grid-col-2 { grid-column: span 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blab-grid-bg"></div>
+
+  <header class="blab-header">
+    <div class="blab-logo">MANUFACTURING<span>.OS</span></div>
+    <div class="blab-nav-badge">CASE STUDY #02</div>
+  </header>
+
+  <!-- 메인 히어로 섹션 -->
+  <section class="blab-hero">
+    <div class="blab-hero-content">
+      <div class="blab-hero-tag">Cloud-Based Factory Automation</div>
+      <h1 class="blab-hero-title">
+        <span class="word-1">ENGINEERING.</span><br>
+        <span class="word-2">AUTOMATED.</span>
+      </h1>
+      <p class="blab-hero-desc">
+        Vention의 기계적 정밀함과 소프트웨어 아키텍처를 결합한 디지털 제조 솔루션 포트폴리오입니다. 복잡한 산업 설비 자동화를 하나의 고도화된 클라우드 인터페이스로 통합 제어합니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 벤토 아키텍처 및 라이브 데이터 증명 섹션 -->
+  <section class="blab-section">
+    <div class="blab-section-header blab-reveal">
+      <div class="blab-hero-tag">Core Architecture</div>
+      <h2 class="blab-section-title">스마트 팩토리의 기술적 증명</h2>
+    </div>
+
+    <div class="blab-bento-grid">
+      <!-- 카드 1 (인터랙티브 대형 콘솔) -->
+      <div class="blab-card grid-col-2 blab-reveal">
+        <div class="blab-card-num">MODULE 01 / LIVE CONTROLLER</div>
+        <h3 class="blab-card-title">실시간 엣지 컴퓨팅 및 원격 하드웨어 동기화</h3>
+        <p class="blab-card-desc">웹 브라우저 내부에서 공장의 기계 장치를 지연 시간 없이 다이렉트로 제어하는 실시간 렌더링 관제 가상 시스템 시뮬레이션 인터페이스입니다.</p>
+        
+        <!-- 실시간 JS 작동 콘솔 위젯 (클라이언트가 감탄하는 포인트) -->
+        <div class="blab-console">
+          <div class="blab-console-header">
+            <div><span class="blab-status-dot"></span><span style="font-size:0.8rem; font-weight:700; color:#00ff66;">FACTORY SECTIONS CONNECTED</span></div>
+            <div style="font-size:0.75rem; color:var(--blab-text-secondary);">SYS_REFRESH: LIVE</div>
+          </div>
+          <div class="blab-metric-flex">
+            <div class="blab-metric-box">
+              <div class="blab-metric-label">OPERATIONAL EFFICIENCY</div>
+              <div class="blab-metric-value" id="eff-value">98.42%</div>
+            </div>
+            <div class="blab-metric-box">
+              <div class="blab-metric-label">REAL-TIME DATA STREAM</div>
+              <div class="blab-metric-value" id="stream-value">4,120 kb/s</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카드 2 -->
+      <div class="blab-card blab-reveal">
+        <div class="blab-card-num">MODULE 02 / PLUG & PLAY</div>
+        <h3 class="blab-card-title">인텔리전트 컴포넌트 솔루션</h3>
+        <p class="blab-card-desc">하드웨어 연결 시 클라우드가 감지하여 드라이버를 자동 세팅하는 모듈러 제조 오퍼레이팅 시스템 구조입니다.</p>
+      </div>
+
+      <!-- 카드 3 -->
+      <div class="blab-card blab-reveal">
+        <div class="blab-card-num">MODULE 03 / ROI ARCHITECTURE</div>
+        <h3 class="blab-card-title">공정 리드타임 84% 단축</h3>
+        <p class="blab-card-desc">설계부터 배포까지 소요되는 인프라 비용과 제조 리드타임을 데이터 수치화 기반으로 설계하여 비즈니스 전환 효과를 극대화합니다.</p>
+      </div>
+
+      <!-- 카드 4 (대형 스팬 카드) -->
+      <div class="blab-card grid-col-2 blab-reveal">
+        <div class="blab-card-num">MODULE 04 / SEO & GROWTH</div>
+        <h3 class="blab-card-title">제조 경쟁력을 높이는 유저 경험과 검색 최적화(SEO)</h3>
+        <p class="blab-card-desc">B2B 제조 중소기업 및 글로벌 바이어들이 타겟 검색 시 상위에 노출될 수 있도록 시맨틱 마크업 설계와 데이터 인덱싱 인프라 세팅을 올인원 패키지로 지원합니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 매출 전환 푸터 섹션 -->
+  <section class="blab-cta-footer blab-reveal">
+    <div class="blab-hero-tag">NEXT LEVEL BUSINESS</div>
+    <h2 class="blab-section-title" style="font-size: 3rem;">비즈니스의 디지털 전환,<br>더 이상 복잡할 필요 없습니다.</h2>
+    <a href="https://kmong.com" target="_blank" rel="noopener noreferrer" class="blab-btn">BLAB에 외주 프로젝트 문의하기</a>
+  </section>
+
+  <script>
+    /* 1. 실시간 데이터 대시보드 스트리밍 시뮬레이션 스크립트 */
+    setInterval(() => {
+      // 효율성 수치 미세 변동 (98.2% ~ 99.8%)
+      const eff = (98.2 + Math.random() * 1.6).toFixed(2);
+      // 스트리밍 데이터 변동 (3900 ~ 4400)
+      const stream = Math.floor(3900 + Math.random() * 500).toLocaleString();
+      
+      document.getElementById('eff-value').innerText = eff + '%';
+      document.getElementById('stream-value').innerText = stream + ' kb/s';
+    }, 1200);
+
+    /* 2. 순수 JS 기반 스크롤 Reveal 애니메이션 (Framer Motion 스타일 인터랙션) */
+    const revealElements = document.querySelectorAll('.blab-reveal');
+    const revealOnScroll = () => {
+      revealElements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+        if (elementTop < windowHeight * 0.88) {
+          element.classList.add('active');
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', () => {
+      revealOnScroll(); // 첫 로드 시 실행
+    });
+  </script>
+</body>
+</html>
