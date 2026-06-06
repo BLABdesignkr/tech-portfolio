@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BLAB Portfolio | NEXT-GEN DIGITAL MANUFACTURING</title>
-  <!-- 프리미엄 고대비 서체 Inter 및 Pretendard 로드 -->
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   <style>
     /* 1. 디자인 시스템 정의 (Vention Tech 감성 및 CSS 격리) */
@@ -243,7 +242,7 @@
     .blab-metric-label { font-size: 0.75rem; color: var(--blab-text-secondary); text-transform: uppercase; }
     .blab-metric-value { font-size: 1.8rem; font-weight: 800; color: var(--blab-accent-cyan); margin-top: 5px; }
 
-    /* [신규 추가 1] 인터랙티브 프로세스 타임라인 가로 레이아웃 */
+    /* 프로세스 타임라인 가로 레이아웃 */
     .blab-timeline {
       display: flex;
       justify-content: space-between;
@@ -280,7 +279,7 @@
       margin-bottom: 15px;
     }
 
-    /* [신규 추가 2] 하드웨어 호환성 네트워크 콘솔 레이아웃 */
+    /* 하드웨어 호환성 네트워크 콘솔 레이아웃 */
     .blab-network-grid {
       display: grid;
       grid-template-columns: 1fr 1.2fr;
@@ -327,6 +326,8 @@
       box-shadow: 0 10px 30px rgba(0, 102, 255, 0.3);
       transition: all 0.3s ease;
       margin-top: 30px;
+      cursor: pointer;
+      border: none;
     }
 
     .blab-btn:hover {
@@ -334,6 +335,91 @@
       transform: translateY(-3px);
       box-shadow: 0 15px 35px rgba(0, 102, 255, 0.5);
     }
+
+    /* [신규 추가] 하이엔드 다크 모달 윈도우 스타일 시스템 */
+    .blab-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(4, 6, 10, 0.96);
+      backdrop-filter: blur(12px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    /* 활성화 상태 격리 제어 */
+    .blab-modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .blab-modal-content {
+      background: var(--blab-bg-card);
+      border: 1px solid rgba(0, 102, 255, 0.25);
+      border-radius: 20px;
+      padding: 45px;
+      width: 90%;
+      max-width: 540px;
+      position: relative;
+      transform: translateY(30px);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+      text-align: left;
+    }
+
+    .blab-modal-overlay.active .blab-modal-content {
+      transform: translateY(0);
+    }
+
+    .blab-modal-close {
+      position: absolute;
+      top: 25px; right: 25px;
+      background: none; border: none;
+      color: var(--blab-text-secondary);
+      font-size: 2rem; cursor: pointer;
+      transition: color 0.2s;
+    }
+    .blab-modal-close:hover { color: white; }
+
+    .blab-modal-title {
+      font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 10px; margin-top: 5px;
+    }
+
+    .blab-form-group {
+      margin-bottom: 18px;
+    }
+
+    .blab-form-label {
+      display: block; font-size: 0.8rem; font-weight: 700; color: var(--blab-accent-cyan);
+      margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+
+    .blab-form-input {
+      width: 100%; background: rgba(7, 9, 14, 0.6);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px; padding: 13px 16px;
+      color: white; font-size: 0.95rem;
+      outline: none; transition: all 0.3s;
+    }
+    .blab-form-input:focus {
+      border-color: var(--blab-accent-blue);
+      box-shadow: 0 0 10px rgba(0, 102, 255, 0.2);
+    }
+    
+    select.blab-form-input {
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238f9cae' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+      background-repeat: no-repeat;
+      background-position: right 15px center;
+      background-size: 16px;
+    }
+    select.blab-form-input option { background: #111622; color: white; }
+
+    textarea.blab-form-input { resize: none; }
 
     /* 스크롤 반응형 Reveal 애니메이션 */
     .blab-reveal {
@@ -356,6 +442,7 @@
       .blab-bento-grid, .blab-timeline, .blab-network-grid { grid-template-columns: 1fr; flex-direction: column; }
       .grid-col-2, .blab-step-node { grid-column: span 1; width: 100%; }
       .blab-step-node::after { content: '↓'; bottom: -20px; right: 48%; top: auto; }
+      .blab-modal-content { padding: 30px 20px; }
     }
   </style>
 </head>
@@ -368,7 +455,6 @@
     <div class="blab-nav-badge">CASE STUDY #02</div>
   </header>
 
-  <!-- 메인 히어로 섹션 -->
   <section class="blab-hero">
     <div class="blab-hero-content">
       <div class="blab-hero-tag">Cloud-Based Factory Automation</div>
@@ -382,7 +468,6 @@
     </div>
   </section>
 
-  <!-- 1. 벤토 아키텍처 섹션 -->
   <section class="blab-section">
     <div class="blab-section-header blab-reveal">
       <div class="blab-hero-tag">Core Architecture</div>
@@ -390,7 +475,6 @@
     </div>
 
     <div class="blab-bento-grid">
-      <!-- 카드 1 (인터랙티브 대형 콘솔) -->
       <div class="blab-card grid-col-2 blab-reveal">
         <div class="blab-card-num">MODULE 01 / LIVE CONTROLLER</div>
         <h3 class="blab-card-title">실시간 엣지 컴퓨팅 및 원격 하드웨어 동기화</h3>
@@ -414,21 +498,18 @@
         </div>
       </div>
 
-      <!-- 카드 2 -->
       <div class="blab-card blab-reveal">
         <div class="blab-card-num">MODULE 02 / PLUG & PLAY</div>
         <h3 class="blab-card-title">인텔리전트 컴포넌트 솔루션</h3>
         <p class="blab-card-desc">하드웨어 연결 시 클라우드가 감지하여 드라이버를 자동 세팅하는 모듈러 제조 OS 구조입니다.</p>
       </div>
 
-      <!-- 카드 3 -->
       <div class="blab-card blab-reveal">
         <div class="blab-card-num">MODULE 03 / ROI ARCHITECTURE</div>
         <h3 class="blab-card-title">공정 리드타임 84% 단축</h3>
         <p class="blab-card-desc">설계부터 배포까지 소요되는 인프라 비용과 제조 리드타임을 수치화 기반으로 설계하여 비즈니스 전환 효과를 극대화합니다.</p>
       </div>
 
-      <!-- 카드 4 -->
       <div class="blab-card grid-col-2 blab-reveal">
         <div class="blab-card-num">MODULE 04 / SEO & GROWTH</div>
         <h3 class="blab-card-title">제조 경쟁력을 높이는 유저 경험과 검색 최적화(SEO)</h3>
@@ -437,7 +518,6 @@
     </div>
   </section>
 
-  <!-- [신규 스크롤 확장 섹션 1] 스마트 자동화 공정 워크플로우 -->
   <section class="blab-section" style="border-top: 1px solid rgba(255,255,255,0.02);">
     <div class="blab-section-header blab-reveal">
       <div class="blab-hero-tag">Automated Workflow</div>
@@ -463,7 +543,6 @@
     </div>
   </section>
 
-  <!-- [신규 스크롤 확장 섹션 2] 실시간 인프라 가동률 및 하드웨어 동기화 터미널 -->
   <section class="blab-section" style="border-top: 1px solid rgba(255,255,255,0.02); background: rgba(0, 102, 255, 0.02);">
     <div class="blab-network-grid">
       <div class="blab-reveal">
@@ -477,7 +556,6 @@
         </p>
       </div>
 
-      <!-- 실시간 터미널 로그 위젯 (스크롤 내릴 때 움직이며 기술력 어필하는 장치) -->
       <div class="blab-terminal blab-reveal" id="terminal-console">
         <div class="blab-terminal-line">[SYS_INFO] Initializing Global Edge Gateway Router...</div>
         <div class="blab-terminal-line">[SYS_INFO] Cloud Synced with Tokyo Edge Server (Latency: 12ms)</div>
@@ -486,12 +564,52 @@
     </div>
   </section>
 
-  <!-- 매출 전환 푸터 섹션 -->
   <section class="blab-cta-footer blab-reveal">
     <div class="blab-hero-tag">NEXT LEVEL BUSINESS</div>
     <h2 class="blab-section-title" style="font-size: 3rem;">비즈니스의 디지털 전환,<br>더 이상 복잡할 필요 없습니다.</h2>
-    <a href="https://kmong.com" target="_blank" rel="noopener noreferrer" class="blab-btn">BLAB에 외주 프로젝트 문의하기</a>
+    <button class="blab-btn" id="blabInquiryOpenBtn">BLAB에 외주 프로젝트 문의하기</button>
   </section>
+
+  <div class="blab-modal-overlay" id="blabInquiryModal">
+    <div class="blab-modal-content">
+      <button class="blab-modal-close" id="blabInquiryCloseBtn">&times;</button>
+      <div class="blab-hero-tag">PROJECT INQUIRY</div>
+      <h2 class="blab-modal-title">외주 프로젝트 문의</h2>
+      <p style="color: var(--blab-text-secondary); margin-bottom: 25px; font-size: 0.95rem; line-height: 1.5;">
+        프로젝트 정보를 입력해 주시면, BLAB의 담당 디렉터가 세밀하게 기술 검토 후 24시간 이내에 제안서를 전달해 드립니다.
+      </p>
+      
+      <form id="blabInquiryForm" onsubmit="handleInquirySubmit(event)">
+        <div class="blab-form-group">
+          <label class="blab-form-label">의뢰인 이름 / 회사명</label>
+          <input type="text" class="blab-form-input" placeholder="예: 홍길동 / 블랩 테크놀로지" required>
+        </div>
+        
+        <div class="blab-form-group">
+          <label class="blab-form-label">연락처 (이메일 또는 휴대폰 번호)</label>
+          <input type="text" class="blab-form-input" placeholder="예: info@blab.kr 또는 010-1234-5678" required>
+        </div>
+        
+        <div class="blab-form-group">
+          <label class="blab-form-label">구축 희망 예산 범위</label>
+          <select class="blab-form-input" required>
+            <option value="" disabled selected>예산을 선택해 주세요</option>
+            <option value="range-1">300만 원 미만 (스타트업/소형)</option>
+            <option value="range-2">300만 원 ~ 600만 원 (일반 B2B 비즈니스)</option>
+            <option value="range-3">600만 원 ~ 1,200만 원 (고급 인터랙션형)</option>
+            <option value="range-4">1,200만 원 이상 (엔터프라이즈 맞춤 솔루션)</option>
+          </select>
+        </div>
+        
+        <div class="blab-form-group">
+          <label class="blab-form-label">요구사항 요약 및 레퍼런스 주소</label>
+          <textarea class="blab-form-input" rows="4" placeholder="프로젝트의 목적이나 꼭 구현하고 싶은 연출(예: Vention 같은 실시간 관제 UI)이 있다면 자유롭게 기재해 주세요." required></textarea>
+        </div>
+        
+        <button type="submit" class="blab-btn" style="width: 100%; margin-top: 10px; border-radius: 8px;">프로젝트 검토 신청하기</button>
+      </form>
+    </div>
+  </div>
 
   <script>
     /* 1. 실시간 데이터 대시보드 스트리밍 시뮬레이션 */
@@ -503,10 +621,11 @@
       document.getElementById('stream-value').innerText = stream + ' kb/s';
     }, 1200);
 
-    /* 2. 신규 관제 터미널 자동 실시간 로그 시뮬레이션 스크립트 */
+    /* 2. 관제 터미널 자동 실시간 로그 시뮬레이션 스크립트 */
     const consoleEl = document.getElementById('terminal-console');
     const nodes = ['Incheon_Main', 'Daegu_Sub', 'Gyeonggi_Logistics', 'Busan_Port_Line'];
     setInterval(() => {
+      if (!consoleEl) return;
       const randomNode = nodes[Math.floor(Math.random() * nodes.length)];
       const randomPing = Math.floor(3 + Math.random() * 15);
       const logLine = document.createElement('div');
@@ -520,7 +639,7 @@
       consoleEl.scrollTop = consoleEl.scrollHeight;
     }, 2000);
 
-    /* 3. 순수 JS 기반 스크롤 Reveal 애니메이션 (Framer Motion 스타일) */
+    /* 3. 순수 JS 기반 스크롤 Reveal 애니메이션 */
     const revealElements = document.querySelectorAll('.blab-reveal');
     const revealOnScroll = () => {
       revealElements.forEach(element => {
@@ -534,6 +653,40 @@
     
     window.addEventListener('scroll', revealOnScroll);
     window.addEventListener('load', () => { revealOnScroll(); });
+
+    /* 4. [신규 추가 인터랙션] 모달 윈도우 원클릭 활성/비활성 제어 스크립트 */
+    const openModalBtn = document.getElementById('blabInquiryOpenBtn');
+    const closeModalBtn = document.getElementById('blabInquiryCloseBtn');
+    const modalOverlay = document.getElementById('blabInquiryModal');
+
+    // 열기 액션 트리거
+    openModalBtn.addEventListener('click', () => {
+      modalOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden'; // 팝업 작동 시 뒷배경 스크롤 방지
+    });
+
+    // 닫기 액션 트리거 (X 버튼 클릭 시)
+    closeModalBtn.addEventListener('click', () => {
+      modalOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+
+    // 암막 배경 클릭 시 투명 닫기 지원
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) {
+        modalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // 폼 최종 제출 완료 인터랙션 시뮬레이터
+    function handleInquirySubmit(event) {
+      event.preventDefault();
+      alert('🔒 프로젝트 보안 검토 및 기술 분석 문의가 정상적으로 접수되었습니다! 24시간 이내에 기재해 주신 연락처로 피드백을 전달해 드리겠습니다.');
+      modalOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+      event.target.reset(); // 입력창 클리어
+    }
   </script>
 </body>
 </html>
