@@ -336,7 +336,7 @@
       box-shadow: 0 15px 35px rgba(0, 102, 255, 0.5);
     }
 
-    /* [신규 추가] 하이엔드 다크 모달 윈도우 스타일 시스템 */
+    /* 하이엔드 다크 모달 윈도우 스타일 시스템 */
     .blab-modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -351,7 +351,6 @@
       transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     
-    /* 활성화 상태 격리 제어 */
     .blab-modal-overlay.active {
       opacity: 1;
       pointer-events: auto;
@@ -437,12 +436,44 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 모바일 반응형 완벽 최적화 */
+    /* ==========================================================================
+       🚨 [핵심 수정] 태블릿 & 초소형 모바일 반응형 감도 고도화 시스템
+       ========================================================================== */
     @media (max-width: 1024px) {
       .blab-bento-grid, .blab-timeline, .blab-network-grid { grid-template-columns: 1fr; flex-direction: column; }
       .grid-col-2, .blab-step-node { grid-column: span 1; width: 100%; }
-      .blab-step-node::after { content: '↓'; bottom: -20px; right: 48%; top: auto; }
-      .blab-modal-content { padding: 30px 20px; }
+      /* 모바일 타임라인 화살표를 완벽하게 정중앙 조절 */
+      .blab-step-node::after { content: '↓'; bottom: -15px; left: 50%; transform: translateX(-50%); top: auto; right: auto; }
+    }
+
+    @media (max-width: 768px) {
+      /* 스마트폰 화면 좌우 여백 및 섹션 상하 간격 컴팩트하게 축소 */
+      .blab-header { padding: 20px 6%; }
+      .blab-hero { padding: 0 6%; }
+      .blab-section { padding: 80px 6%; }
+      
+      /* 모바일 타이틀 자간 및 오버플로우 방지 랩핑 */
+      .blab-hero-title { font-size: clamp(2.5rem, 11vw, 4.2rem); line-height: 1.0; }
+      .blab-hero-desc { font-size: 1rem; margin-bottom: 30px; }
+      
+      /* 가로 폭이 좁은 폰에서 카드 안쪽 여백을 줄여 본문 글씨 영역 확보 (가독성 폭발) */
+      .blab-card { padding: 24px; border-radius: 12px; }
+      .blab-card-title { font-size: 1.35rem; }
+      
+      /* 🚨 라이브 제어 콘솔 박스의 데이터가 모바일에서 구겨지거나 겹치지 않게 수직 적층 */
+      .blab-metric-flex { flex-direction: column; gap: 12px; }
+      .blab-metric-box { width: 100%; }
+      
+      .blab-timeline { gap: 35px; }
+      .blab-step-node { padding: 20px; }
+      .blab-network-grid { gap: 30px; }
+      
+      .blab-cta-footer { padding: 90px 6% 60px 6%; }
+      .blab-section-title { font-size: 1.85rem; }
+      
+      /* 의뢰 모달창 스마트폰 전용 크기 대응 */
+      .blab-modal-content { padding: 30px 20px; width: 95%; }
+      .blab-modal-title { font-size: 1.6rem; }
     }
   </style>
 </head>
@@ -617,8 +648,10 @@
       const eff = (98.2 + Math.random() * 1.6).toFixed(2);
       const stream = Math.floor(3900 + Math.random() * 500).toLocaleString();
       
-      document.getElementById('eff-value').innerText = eff + '%';
-      document.getElementById('stream-value').innerText = stream + ' kb/s';
+      const effEl = document.getElementById('eff-value');
+      const streamEl = document.getElementById('stream-value');
+      if(effEl) effEl.innerText = eff + '%';
+      if(streamEl) streamEl.innerText = stream + ' kb/s';
     }, 1200);
 
     /* 2. 관제 터미널 자동 실시간 로그 시뮬레이션 스크립트 */
@@ -654,38 +687,36 @@
     window.addEventListener('scroll', revealOnScroll);
     window.addEventListener('load', () => { revealOnScroll(); });
 
-    /* 4. [신규 추가 인터랙션] 모달 윈도우 원클릭 활성/비활성 제어 스크립트 */
+    /* 4. 모달 윈도우 원클릭 활성/비활성 제어 스크립트 */
     const openModalBtn = document.getElementById('blabInquiryOpenBtn');
     const closeModalBtn = document.getElementById('blabInquiryCloseBtn');
     const modalOverlay = document.getElementById('blabInquiryModal');
 
-    // 열기 액션 트리거
-    openModalBtn.addEventListener('click', () => {
-      modalOverlay.classList.add('active');
-      document.body.style.overflow = 'hidden'; // 팝업 작동 시 뒷배경 스크롤 방지
-    });
+    if(openModalBtn && closeModalBtn && modalOverlay) {
+      openModalBtn.addEventListener('click', () => {
+        modalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
 
-    // 닫기 액션 트리거 (X 버튼 클릭 시)
-    closeModalBtn.addEventListener('click', () => {
-      modalOverlay.classList.remove('active');
-      document.body.style.overflow = '';
-    });
-
-    // 암막 배경 클릭 시 투명 닫기 지원
-    modalOverlay.addEventListener('click', (e) => {
-      if (e.target === modalOverlay) {
+      closeModalBtn.addEventListener('click', () => {
         modalOverlay.classList.remove('active');
         document.body.style.overflow = '';
-      }
-    });
+      });
 
-    // 폼 최종 제출 완료 인터랙션 시뮬레이터
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+          modalOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+
     function handleInquirySubmit(event) {
       event.preventDefault();
       alert('🔒 프로젝트 보안 검토 및 기술 분석 문의가 정상적으로 접수되었습니다! 24시간 이내에 기재해 주신 연락처로 피드백을 전달해 드리겠습니다.');
-      modalOverlay.classList.remove('active');
+      if(modalOverlay) modalOverlay.classList.remove('active');
       document.body.style.overflow = '';
-      event.target.reset(); // 입력창 클리어
+      event.target.reset();
     }
   </script>
 </body>
