@@ -437,30 +437,47 @@
     }
 
     /* ==========================================================================
-       🚨 [핵심 수정] 태블릿 & 초소형 모바일 반응형 감도 고도화 시스템
+       🚨 미디어 쿼리 반응형 감도 최적화 시스템 (헤더 겹침 버그 집중 패치)
        ========================================================================== */
     @media (max-width: 1024px) {
       .blab-bento-grid, .blab-timeline, .blab-network-grid { grid-template-columns: 1fr; flex-direction: column; }
       .grid-col-2, .blab-step-node { grid-column: span 1; width: 100%; }
-      /* 모바일 타임라인 화살표를 완벽하게 정중앙 조절 */
       .blab-step-node::after { content: '↓'; bottom: -15px; left: 50%; transform: translateX(-50%); top: auto; right: auto; }
     }
 
     @media (max-width: 768px) {
-      /* 스마트폰 화면 좌우 여백 및 섹션 상하 간격 컴팩트하게 축소 */
-      .blab-header { padding: 20px 6%; }
+      /* [버그 수정] 모바일 헤더 간격 가동성 대폭 확장 */
+      .blab-header { 
+        padding: 20px 5% !important; 
+        gap: 15px !important; 
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+      }
+      /* 로고 크기를 모바일 뷰포트에 맞춰 최적화 */
+      .blab-logo { 
+        font-size: 1.15rem !important; 
+        white-space: nowrap !important;
+      }
+      /* 배지 텍스트 겹침 및 줄바꿈 차단 기능 주입 */
+      .blab-nav-badge { 
+        font-size: 0.72rem !important; 
+        padding: 5px 12px !important; 
+        white-space: nowrap !important; /* 강제 줄바꿈 방지 */
+        flex-shrink: 0 !important;     /* 로고에 밀려 크기가 줄어들지 않도록 보호 */
+      }
+
+      /* 섹션 본문 밸런스 패치 */
       .blab-hero { padding: 0 6%; }
       .blab-section { padding: 80px 6%; }
       
-      /* 모바일 타이틀 자간 및 오버플로우 방지 랩핑 */
       .blab-hero-title { font-size: clamp(2.5rem, 11vw, 4.2rem); line-height: 1.0; }
       .blab-hero-desc { font-size: 1rem; margin-bottom: 30px; }
       
-      /* 가로 폭이 좁은 폰에서 카드 안쪽 여백을 줄여 본문 글씨 영역 확보 (가독성 폭발) */
       .blab-card { padding: 24px; border-radius: 12px; }
       .blab-card-title { font-size: 1.35rem; }
       
-      /* 🚨 라이브 제어 콘솔 박스의 데이터가 모바일에서 구겨지거나 겹치지 않게 수직 적층 */
+      /* 데이터 박스 크래시 방지 수직 스택 구조 */
       .blab-metric-flex { flex-direction: column; gap: 12px; }
       .blab-metric-box { width: 100%; }
       
@@ -471,7 +488,6 @@
       .blab-cta-footer { padding: 90px 6% 60px 6%; }
       .blab-section-title { font-size: 1.85rem; }
       
-      /* 의뢰 모달창 스마트폰 전용 크기 대응 */
       .blab-modal-content { padding: 30px 20px; width: 95%; }
       .blab-modal-title { font-size: 1.6rem; }
     }
@@ -617,7 +633,7 @@
         </div>
         
         <div class="blab-form-group">
-          <label class="blab-form-label">연락처 (이메일 또는 휴대폰 번호)</label>
+          <label class="blab-form-label">連絡先 (이메일 또는 휴대폰 번호)</label>
           <input type="text" class="blab-form-input" placeholder="예: info@blab.kr 또는 010-1234-5678" required>
         </div>
         
